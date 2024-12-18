@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buttonEl.appendChild(imgEl);
     buttonEl.appendChild(infoDiv);
-  };
+  });
 
   function setupSearch(searchInput, dropdown) { 
     searchInput.addEventListener('input', () => {
