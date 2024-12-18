@@ -98,13 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderCryptoButton(buttonEl, symbol, image, network) {
-    buttonEl.innerHTML = ''; 
-    buttonEl.style.display = 'inline-flex';
-    buttonEl.style.alignItems = 'center';
-    buttonEl.style.padding = '5px';
-    buttonEl.style.background = 'transparent';
-    buttonEl.style.border = '1px solid #444';
-    buttonEl.style.borderRadius = '4px';
+  buttonEl.innerHTML = ''; 
+  buttonEl.style.display = 'inline-flex';
+  buttonEl.style.alignItems = 'center';
+  buttonEl.style.padding = '10px';               // Slightly increase padding for better appearance
+  buttonEl.style.background = '#9002c0';         // Set background color to #9002c0
+  buttonEl.style.border = 'none';                // Remove the border
+  buttonEl.style.borderRadius = '8px';           // Optional: rounded corners for aesthetics
+  buttonEl.style.color = '#fff';                 // Optional: set text color to white for better contrast
+  buttonEl.style.margin = '0 auto';              // Center the button horizontally
+  buttonEl.style.textAlign = 'center';           // Ensure the content is centered
+}
 
     let imgSrc = image && image.trim() !== '' ? image : coingeckoMap[symbol] || 'https://via.placeholder.com/24';
 
@@ -378,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
       user_refund_address: refundAddress
     };
 
-    fetch(`${BACKEND_URL}/api/create-exchange`, {
+    fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=false`, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
@@ -511,5 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
       updateUIAfterDirectionChange();
       updateAmounts();
     })
-      .catch(err => console.error("Error fetching cryptos:", err));
+    .catch(err => console.error("Error fetching cryptos:", err));
+
 });
