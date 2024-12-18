@@ -1,3 +1,5 @@
+"esversion": 6;
+
 document.addEventListener('DOMContentLoaded', () => {
   const BACKEND_URL = "https://meowmeow.ngrok.app"; // Adjust if needed
 
@@ -161,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.style.display = textContent.includes(query) ? 'flex' : 'none';
       });
     });
-  };
+  }
 
   function buildDropdownItems(dropdown, cryptos, onSelect) {
     const existingItems = dropdown.querySelectorAll('.dropdown-item');
