@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttonEl.appendChild(infoDiv);
   }
 
-  function setupSearch(searchInput, dropdown)) {
+  function setupSearch(searchInput, dropdown) {
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
       const items = dropdown.querySelectorAll('.dropdown-item');
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.style.display = textContent.includes(query) ? 'flex' : 'none';
       });
     });
-  }
+  };
 
   function buildDropdownItems(dropdown, cryptos, onSelect) {
     const existingItems = dropdown.querySelectorAll('.dropdown-item');
