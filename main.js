@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttonEl.appendChild(infoDiv);
   }
 
-  function setupSearch(searchInput, dropdown) {
+  function setupSearch(searchInput, dropdown)) {
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
       const items = dropdown.querySelectorAll('.dropdown-item');
