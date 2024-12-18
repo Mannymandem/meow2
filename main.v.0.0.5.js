@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   infoDiv.style.flexDirection = 'column';
 
   let coin = aggregatorCryptos.find(c => c.symbol === symbol);
-  let displayName = coin && coin.name ? symbol + " - " + coin.name : symbol;
+  let displayName = coin && coin.name ? symbol;
 
   const symbolSpan = document.createElement('span');
   symbolSpan.style.fontWeight = 'bold';
