@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
       networkPill.style.borderRadius = '4px';
       networkPill.style.display = 'inline-block';
       networkPill.style.backgroundColor = bgColor;
-      networkPill.style.width = '40px'; // fixed width for consistency
+      networkPill.style.width = '50px'; // fixed width for consistency
       networkPill.style.textAlign = 'center';
       networkPill.textContent = net;
 
