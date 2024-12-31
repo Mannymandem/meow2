@@ -112,15 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return "An error occurred";
   }
 
-  // Format ticker and network (like before)
+  // Format ticker and network
   function formatTickerAndNetwork(symbol, network) {
     let s = symbol.toUpperCase();
     let net = network ? network.toUpperCase() : '';
-
     if (net === 'BSC' && s.endsWith('BEP20')) {
       s = s.replace('BEP20', '').trim();
     }
-
     return { ticker: s, network: net };
   }
 
@@ -172,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
       networkPill.style.borderRadius = '4px';
       networkPill.style.display = 'inline-block';
       networkPill.style.backgroundColor = bgColor;
-      networkPill.style.width = '50px'; 
+      networkPill.style.width = '50px';
       networkPill.style.textAlign = 'center';
       networkPill.textContent = net;
 
@@ -234,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
       itemsContainer.classList.add('dropdown-items-container');
       itemsContainer.style.padding = '10px';
       itemsContainer.style.overflowY = 'auto';
-      itemsContainer.style.maxHeight = 'calc(300px - 60px)'; 
+      itemsContainer.style.maxHeight = 'calc(300px - 60px)';
       dropdown.appendChild(itemsContainer);
     } else {
       itemsContainer.innerHTML = '';
@@ -458,7 +456,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const secondsEl = document.getElementById('countdown-seconds');
     const fillEl = document.getElementById('countdown-fill');
 
-    if (!minutesEl || !secondsEl || !fillEl) return;
+    // Only run countdown if these elements exist
+    if (!minutesEl || !secondsEl || !fillEl) {
+      console.log("Countdown elements not found, skipping deposit countdown.");
+      return;
+    }
 
     fillEl.style.width = '0%';
 
