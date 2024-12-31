@@ -561,12 +561,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update transaction ID
         if (transactionIdEl) {
-          transactionIdEl.textContent = `Transaction ID: ${data.aggregator_tx_id}`;
+          transactionIdEl.textContent = ${data.aggregator_tx_id};
         }
 
         // Update deposit address
         if (depositAddressDisplay) {
-          depositAddressDisplay.textContent = `Deposit Address: ${data.deposit_address}`;
+          depositAddressDisplay.textContent = ${data.deposit_address};
         }
 
         // "You Send" / "You Receive"
