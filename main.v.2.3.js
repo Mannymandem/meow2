@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const exchangeButton = document.getElementById('exchange-button');
 
   // Modal elements
-  const El = document.getElementById('modal-tx-id');
+  const transactionIdEl = document.getElementById('modal-tx-id');
   const depositAddressDisplay = document.getElementById('modal-deposit-address');
   const qrcodeContainer = document.getElementById('modal-qrcode');
   const statusText = document.getElementById('modal-status-text');
@@ -561,12 +561,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update transaction ID
         if (transactionIdEl) {
-          transactionIdEl.textContent = ' ${data.aggregator_tx_id} ' ;
+          transactionIdEl.textContent = `${data.aggregator_tx_id}`;
         }
 
         // Update deposit address
         if (depositAddressDisplay) {
-          depositAddressDisplay.textContent = ' ${data.deposit_address} ' ;
+          depositAddressDisplay.textContent = `${data.deposit_address}`;
         }
 
         // "You Send" / "You Receive"
