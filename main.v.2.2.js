@@ -86,8 +86,46 @@ document.addEventListener('DOMContentLoaded', () => {
     "BCH": "#8DC351"
   };
 
-  // We'll store the countdown interval here so we can clear it as needed
+  // ==========================================
+  // NEW: For countdown
   let countdownInterval;
+  function startDepositCountdown() {
+    // 5 minutes total
+    let totalSeconds = 300;
+    let remaining = totalSeconds;
+
+    // IDs we expect in the HTML
+    const minutesEl = document.getElementById('countdown-minutes');
+    const secondsEl = document.getElementById('countdown-seconds');
+    const fillEl = document.getElementById('countdown-fill');
+
+    // If you do NOT have these elements, remove or adapt these lines as needed
+    if (!minutesEl || !secondsEl || !fillEl) {
+      console.log("No countdown elements found; skipping timer logic.");
+      return;
+    }
+
+    fillEl.style.width = '0%';
+
+    clearInterval(countdownInterval);
+    countdownInterval = setInterval(() => {
+      remaining--;
+      if (remaining < 0) {
+        clearInterval(countdownInterval);
+        alert("Time limit reached. Please restart the trade for an updated rate.");
+        document.getElementById('exchange-modal-container').style.display = 'none';
+        return;
+      }
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      minutesEl.textContent = m.toString();
+      secondsEl.textContent = (s < 10 ? '0' : '') + s;
+
+      const percent = ((totalSeconds - remaining) / totalSeconds) * 100;
+      fillEl.style.width = percent + '%';
+    }, 1000);
+  }
+  // ==========================================
 
   function parseErrorDescription(errMsg) {
     const jsonStart = errMsg.indexOf('{');
@@ -112,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return "An error occurred";
   }
 
-  // Format ticker and network
   function formatTickerAndNetwork(symbol, network) {
     let s = symbol.toUpperCase();
     let net = network ? network.toUpperCase() : '';
@@ -131,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttonEl.style.border = 'none';
     buttonEl.style.borderRadius = '8px';
     buttonEl.style.color = '#fff';
-    buttonEl.style.margin = '0 8px 0 0';
+    buttonEl.style.margin = '0 8px 0 0'; 
     buttonEl.style.textAlign = 'center';
     buttonEl.style.cursor = 'pointer';
     buttonEl.style.fontWeight = 'bold';
@@ -170,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
       networkPill.style.borderRadius = '4px';
       networkPill.style.display = 'inline-block';
       networkPill.style.backgroundColor = bgColor;
-      networkPill.style.width = '50px';
+      networkPill.style.width = '50px'; 
       networkPill.style.textAlign = 'center';
       networkPill.textContent = net;
 
@@ -232,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
       itemsContainer.classList.add('dropdown-items-container');
       itemsContainer.style.padding = '10px';
       itemsContainer.style.overflowY = 'auto';
-      itemsContainer.style.maxHeight = 'calc(300px - 60px)';
+      itemsContainer.style.maxHeight = 'calc(300px - 60px)'; 
       dropdown.appendChild(itemsContainer);
     } else {
       itemsContainer.innerHTML = '';
@@ -358,7 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(d => {
         const net = d.network || "";
         if (!net) return ""; // no fallback if no network is indicated
-
         const netKey = net.toUpperCase();
         const bgColor = networkColors[netKey] || "#444";
         return `Please note that ${symbol.toUpperCase()} must be sent on the <span style="display:inline-block;padding:2px 4px;border-radius:4px;background-color:${bgColor};color:#fff;">${netKey}</span> network!`;
@@ -446,45 +482,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // --------------- COUNTDOWN ADDITIONS ---------------
-  let countdownInterval;
-  function startDepositCountdown() {
-    const totalSeconds = 300; // 5 minutes
-    let remaining = totalSeconds;
-
-    const minutesEl = document.getElementById('countdown-minutes');
-    const secondsEl = document.getElementById('countdown-seconds');
-    const fillEl = document.getElementById('countdown-fill');
-
-    // Only run countdown if these elements exist
-    if (!minutesEl || !secondsEl || !fillEl) {
-      console.log("Countdown elements not found, skipping deposit countdown.");
-      return;
-    }
-
-    fillEl.style.width = '0%';
-
-    clearInterval(countdownInterval);
-    countdownInterval = setInterval(() => {
-      remaining--;
-      if (remaining < 0) {
-        clearInterval(countdownInterval);
-        alert("Deposit time window expired. Please restart the trade with a new conversion rate.");
-        document.getElementById('exchange-modal-container').style.display = 'none';
-        return;
-      }
-      const m = Math.floor(remaining / 60);
-      const s = remaining % 60;
-      minutesEl.textContent = m;
-      secondsEl.textContent = s < 10 ? '0' + s : s;
-
-      const percent = ((300 - remaining) / 300) * 100;
-      fillEl.style.width = percent + '%';
-    }, 1000);
-  }
-  // ----------------------------------------------
-
-  // Exchange flow (two-step modal)
+  // ---------------------------------------------
+  // Updated Exchange Flow: two-step modal approach
+  // ---------------------------------------------
   exchangeButton.addEventListener('click', () => {
     const fromAmount = parseFloat(fromAmountInput.value);
     if (!fromAmount) {
@@ -509,93 +509,97 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Show the modal container and Step 1 (addresses)
     addressesModalContainer.style.display = 'flex';
     addressesStep.style.display = 'block';
     depositStep.style.display = 'none';
 
+    // Clear old data
     addressesModalWarning.textContent = "";
     recipientAddr.value = "";
     refundAddr.value = "";
-  });
 
-  addressesConfirmBtn.onclick = () => {
-    const fromAmount = parseFloat(fromAmountInput.value);
-    let fromCur, toCur;
-    if (direction === "crypto_to_xmr") {
-      fromCur = selectedFromCurrency;
-      toCur = "xmr";
-    } else {
-      fromCur = "xmr";
-      toCur = selectedToCurrency;
-    }
+    // We'll skip aggregator "warnings_to"—not needed now.
 
-    const addressInput = recipientAddr.value.trim();
-    const refundInput = refundAddr.value.trim();
+    // On "Confirm" in the addresses step
+    addressesConfirmBtn.onclick = () => {
+      const addressInput = recipientAddr.value.trim();
+      const refundInput = refundAddr.value.trim();
 
-    if (!addressInput) {
-      alert(`${toCur.toUpperCase()} address is required.`);
-      return;
-    }
-
-    addressesStep.style.display = 'none';
-
-    const payload = {
-      from_currency: fromCur,
-      to_currency: toCur,
-      from_amount: fromAmount,
-      address_to: addressInput,
-      user_refund_address: refundInput
-    };
-
-    fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=false`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.error) {
-        alert("Error creating exchange: " + data.error);
+      if (!addressInput) {
+        alert(`${toCur.toUpperCase()} address is required.`);
         return;
       }
 
-      depositStep.style.display = 'block';
+      // Hide addresses step (remain in same container)
+      addressesStep.style.display = 'none';
 
-      if (transactionIdEl) {
-        transactionIdEl.textContent = `Transaction ID: ${data.aggregator_tx_id}`;
-      }
-      if (depositAddressDisplay) {
-        depositAddressDisplay.textContent = `Deposit Address: ${data.deposit_address}`;
-      }
+      // Build the payload
+      const payload = {
+        from_currency: fromCur,
+        to_currency: toCur, // ADDED THIS LINE
+        from_amount: fromAmount,
+        address_to: addressInput,
+        user_refund_address: refundInput
+      };
 
-      const modalYouSend = document.getElementById('modal-you-send');
-      const modalYouGet = document.getElementById('modal-you-get');
-      if (modalYouSend) {
-        modalYouSend.textContent = fromAmount + " " + fromCur.toUpperCase();
-      }
-      if (modalYouGet && data.to_amount) {
-        modalYouGet.textContent = data.to_amount + " " + toCur.toUpperCase();
-      }
+      // Create the exchange
+      fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=false`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          alert("Error creating exchange: " + data.error);
+          return;
+        }
 
-      if (qrcodeContainer) {
-        qrcodeContainer.innerHTML = "";
-        new QRCode(qrcodeContainer, {
-          text: data.deposit_address,
-          width:128,
-          height:128
-        });
-      }
+        // Show deposit step
+        depositStep.style.display = 'block';
 
-      pollTransactionStatus(data.transactionId);
+        // Update transaction ID
+        if (transactionIdEl) {
+          transactionIdEl.textContent = `Transaction ID: ${data.aggregator_tx_id}`;
+        }
 
-      // Start deposit countdown once deposit step is shown
-      startDepositCountdown();
-    })
-    .catch(err => {
-      console.error("Error creating exchange:", err);
-      alert("Failed to create exchange.");
-    });
-  };
+        // Update deposit address
+        if (depositAddressDisplay) {
+          depositAddressDisplay.textContent = `Deposit Address: ${data.deposit_address}`;
+        }
+
+        // "You Send" / "You Receive"
+        const modalYouSend = document.getElementById('modal-you-send');
+        const modalYouGet = document.getElementById('modal-you-get');
+        if (modalYouSend) {
+          modalYouSend.textContent = fromAmount + " " + fromCur.toUpperCase();
+        }
+        if (modalYouGet && data.to_amount) {
+          modalYouGet.textContent = data.to_amount + " " + toCur.toUpperCase();
+        }
+
+        // Generate the QR code in the modal
+        if (qrcodeContainer) {
+          qrcodeContainer.innerHTML = "";
+          new QRCode(qrcodeContainer, {
+            text: data.deposit_address,
+            width:128,
+            height:128
+          });
+        }
+
+        pollTransactionStatus(data.transactionId);
+
+        // ADD: Start deposit countdown once deposit step is shown
+        startDepositCountdown(); 
+      })
+      .catch(err => {
+        console.error("Error creating exchange:", err);
+        alert("Failed to create exchange.");
+      });
+    };
+  });
 
   function pollTransactionStatus(txId) {
     const interval = setInterval(() => {
@@ -613,6 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const spinnerEl = document.getElementById('modal-spinner');
           if (!modalStatusText || !modalConfirmations || !spinnerEl) return;
 
+          // Remove existing status classes
           modalStatusText.className = '';
           modalConfirmations.textContent = '';
 
