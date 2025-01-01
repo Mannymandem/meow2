@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     existingItems.forEach(i => i.remove());
 
     dropdown.style.background = '#442244';
-    dropdown.style.borderRadius = '8px';
+    dropdown.style.borderRadius = '0px';
     dropdown.style.padding = '0';
     dropdown.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
     dropdown.style.maxHeight = '300px';
