@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
       user_refund_address: refundInput
     };
 
-    fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=false`, {
+    fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=true`, {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify(payload)
