@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
           toAmountInput.value = parseErrorDescription(data.error);
           return;
         }
-        toAmountInput.value = data.to_amount.toFixed(6);
+        toAmountInput.value = data.to_amount.to(6);
       })
       .catch(err => {
         console.error("Error fetching estimate:", err);
@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
       user_refund_address: refundInput
     };
 
-    fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=false`, {
+    fetch(`${BACKEND_URL}/api/create_exchange?api_key=YOUR_API_KEY&fixed=true`, {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify(payload)
