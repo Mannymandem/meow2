@@ -186,8 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgEl = document.createElement('img');
     imgEl.src = imgSrc;
     imgEl.alt = `${symbol} logo`;
-    imgEl.style.width = '30px';
-    imgEl.style.height = '30px';
+    imgEl.style.width = '28px';
+    imgEl.style.height = '28px';
     imgEl.style.marginRight = '8px';
     imgEl.style.display = 'block';
 
